@@ -63,9 +63,42 @@ function draw() {
     ctx.fillStyle = "gray";
     ctx.fillRect(0, canvas.height - 60, canvas.width, 10);
 
-    // Plane
-    ctx.fillStyle = "white";
-    ctx.fillRect(plane.x, plane.y, 60, 20);
+// Draw Cessna 182
+
+ctx.save();
+ctx.translate(plane.x, plane.y);
+
+// Fuselage
+ctx.fillStyle = "white";
+ctx.fillRect(0, 0, 80, 15);
+
+// Nose
+ctx.beginPath();
+ctx.moveTo(80, 0);
+ctx.lineTo(95, 7.5);
+ctx.lineTo(80, 15);
+ctx.closePath();
+ctx.fill();
+
+// Wing (high wing like Cessna)
+ctx.fillStyle = "lightgray";
+ctx.fillRect(20, -15, 60, 8);
+
+// Tail
+ctx.fillStyle = "white";
+ctx.fillRect(-10, -10, 15, 8);
+
+// Vertical stabilizer
+ctx.fillRect(-5, -20, 6, 15);
+
+// Propeller
+ctx.strokeStyle = "black";
+ctx.beginPath();
+ctx.moveTo(95, -5);
+ctx.lineTo(95, 20);
+ctx.stroke();
+
+ctx.restore();
 
     // HUD
     ctx.fillStyle = "black";
