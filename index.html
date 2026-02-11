@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Mini Flight Sim</title>
+<style>
+body { margin: 0; overflow: hidden; background: skyblue; }
+canvas { display: block; }
+</style>
+</head>
+<body>
+
+<canvas id="game"></canvas>
+
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let plane = {
+    x: 100,
+    y: canvas.height - 100,
+    speed: 0,
+    throttle: 0,
+    lift: 0
+};
+
+let gravity = 0.3;
+let keys = {};
+
+document.addEventListener("keydown", e => keys[e.key] = true);
+document.addEventListener("keyup", e => keys[e.key] = false);
+
+function update() {
+
+    if (keys["ArrowUp"]) plane.throttle += 0.02;
+    if (keys["ArrowDown"]) plane.throttle -= 0.02;
+
+    plane.throttle = Math.max(0, Math.min(1, plane.throttle));
+    plane.speed = plane.throttle * 10;
+
+    plane.x += plane.speed;
+
+    plane.lift = plane.speed * 0.05;
+
+    plane.y += gravity - plane.lift;
+
+    if (plane.y > canvas.height - 50) {
+        plane.y = canvas.height - 50;
+    }
+
+}
+
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Ground
+    ctx.fillStyle = "green";
+    ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
+
+    // Runway
+    ctx.fillStyle = "gray";
+    ctx.fillRect(0, canvas.height - 60, canvas.width, 10);
+
+    // Plane
+    ctx.fillStyle = "white";
+    ctx.fillRect(plane.x, plane.y, 60, 20);
+
+    // HUD
+    ctx.fillStyle = "black";
+    ctx.font = "20px Arial";
+    ctx.fillText("Throttle: " + Math.round(plane.throttle * 100) + "%", 20, 30);
+    ctx.fillText("Speed: " + plane.speed.toFixed(1), 20, 60);
+    ctx.fillText("Altitude: " + Math.round(canvas.height - plane.y - 50), 20, 90);
+}
+
+function loop() {
+    update();
+    draw();
+    requestAnimationFrame(loop);
+}
+
+loop();
+</script>
+
+</body>
+</html>
